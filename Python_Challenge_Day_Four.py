@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 import os
 import requests
 
@@ -16,6 +17,11 @@ def print_bar(text=None):
             print("=" * side_len + " " + text + " " + "=" * (side_len - 1))
 
 
+def is_url(url):
+    result = urlparse(url)
+    return all([result.scheme, result.netloc])
+
+
 def check_url():
     print_bar()
     print("                        Welcome to IsItDown.py!")
@@ -23,14 +29,18 @@ def check_url():
     print_bar("Write url or urls")
 
     urls = list(map(lambda url: "http://" + url.strip()
-                    if "http://" not in url else url.strip(), input().split(",")))
+                    if "http://" not in url and "." in url and url else url.strip(), input().split(",")))
 
     print_bar()
 
     for url in urls:
         try:
-            requests.get(url)
-            print(f"{url} is up!")
+            if (is_url(url)):
+                requests.get(url)
+                print(f"{url} is up!")
+
+            else:
+                print(f"{url} is not a valid URL.")
 
         except Exception as e:
             print(f"{url} is down!")
