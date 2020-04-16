@@ -1,3 +1,4 @@
+import os
 import requests
 
 
@@ -39,6 +40,7 @@ def check_url():
 
 def loop():
     check = "y"
+    os.system("clear")
 
     while check == "y":
         check_url()
@@ -53,6 +55,8 @@ def loop():
             print("Ok. bye!")
             print_bar()
             break
+
+        os.system("clear")
 
 
 if __name__ == "__main__":
