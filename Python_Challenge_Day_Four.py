@@ -49,7 +49,7 @@ def loop():
         while check != "y" and check != "n":
             print("That's not a valid answer")
             print_bar()
-            check = input("sDo you want to start over? (y/n) ")
+            check = input("Do you want to start over? (y/n) ")
 
         if check == "n":
             print("Ok. bye!")
