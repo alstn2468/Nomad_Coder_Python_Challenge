@@ -25,15 +25,16 @@ def parse_data():
     html = response.text
     soup = BeautifulSoup(html, "html.parser")
     countries = soup.select("table > tbody > tr")
-    data = [list(filter(lambda x: x != "\n", country.children))
-            for country in countries]
+    data = [
+        list(filter(lambda x: x != "\n", country.children)) for country in countries
+    ]
     filtered_data = list(
         (
             map(
-                lambda country: [
-                    country[0].text.capitalize(), country[-2].text],
-                filter(lambda country: country[1].text !=
-                       "No universal currency", data),
+                lambda country: [country[0].text.capitalize(), country[-2].text],
+                filter(
+                    lambda country: country[1].text != "No universal currency", data
+                ),
             )
         )
     )
@@ -45,8 +46,7 @@ def main():
     os.system("clear")
     filtered_data = parse_data()
     print("Hello! Pease choose select a country by number:")
-    print("\n".join([f"# {idx:3} {val[0]}" for idx,
-                     val in enumerate(filtered_data)]))
+    print("\n".join([f"# {idx:3} {val[0]}" for idx, val in enumerate(filtered_data)]))
 
     user_input = get_int_input(len(filtered_data))
     print(
