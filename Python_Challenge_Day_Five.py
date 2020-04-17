@@ -49,12 +49,11 @@ def main():
                      val in enumerate(filtered_data)]))
 
     user_input = get_int_input(len(filtered_data))
-    print(user_input)
     print(
-        f"""You choose {filtered_data[user_input][0]}
-  The currency code is {filtered_data[user_input][1]}"""
+        f"You choose {filtered_data[user_input][0]}\n"
+        + f"The currency code is {filtered_data[user_input][1]}"
     )
 
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
     main()
