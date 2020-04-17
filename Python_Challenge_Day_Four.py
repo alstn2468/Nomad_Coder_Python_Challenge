@@ -1,60 +1,73 @@
+from urllib.parse import urlparse
 import os
 import requests
-from bs4 import BeautifulSoup
 
 
-def get_int_input(length, prompt="#: "):
-    user_input = input(prompt).strip()
+def print_bar(text=None):
+    if text is None:
+        print("=" * 70)
 
-    try:
-        user_input = int(user_input)
+    else:
+        side_len = (70 - len(text)) // 2
 
-        if user_input > (length - 1) or user_input < 0:
-            raise RuntimeError
-        return user_input
-    except ValueError:
-        return get_int_input(length, prompt="That wasn't a number.\n#: ")
-    except RuntimeError:
-        return get_int_input(length, prompt="Choose a number from the list.\n#: ")
+        if len(text) % 2 == 0:
+            print("=" * side_len + " " + text + " " + "=" * side_len)
 
-
-def parse_data():
-    url = "https://www.iban.com/currency-codes"
-
-    response = requests.get(url)
-    html = response.text
-    soup = BeautifulSoup(html, "html.parser")
-    countries = soup.select("table > tbody > tr")
-    data = [list(filter(lambda x: x != "\n", country.children))
-            for country in countries]
-    filtered_data = list(
-        (
-            map(
-                lambda country: [
-                    country[0].text.capitalize(), country[-2].text],
-                filter(lambda country: country[1].text !=
-                       "No universal currency", data),
-            )
-        )
-    )
-
-    return filtered_data
+        else:
+            print("=" * side_len + " " + text + " " + "=" * (side_len - 1))
 
 
-def main():
+def is_url(url):
+    result = urlparse(url)
+    return all([result.scheme, result.netloc])
+
+
+def check_url():
+    print_bar()
+    print("                        Welcome to IsItDown.py!")
+    print("  Please write a URL or URLs you want to check. (seperated by comma)")
+    print_bar("Write url or urls")
+
+    urls = list(map(lambda url: "http://" + url.strip()
+                    if "http://" not in url and "." in url and url else url.strip(), input().split(",")))
+
+    print_bar()
+
+    for url in urls:
+        try:
+            if (is_url(url)):
+                requests.get(url)
+                print(f"{url} is up!")
+
+            else:
+                print(f"{url} is not a valid URL.")
+
+        except Exception as e:
+            print(f"{url} is down!")
+
+    print_bar()
+
+
+def loop():
+    check = "y"
     os.system("clear")
-    filtered_data = parse_data()
-    print("Hello! Pease choose select a country by number:")
-    print("\n".join([f"# {idx:3} {val[0]}" for idx,
-                     val in enumerate(filtered_data)]))
 
-    user_input = get_int_input(len(filtered_data))
-    print(user_input)
-    print(
-        f"""You choose {filtered_data[user_input][0]}
-  The currency code is {filtered_data[user_input][1]}"""
-    )
+    while check == "y":
+        check_url()
+        check = input("Do you want to start over? (y/n) ")
+
+        while check != "y" and check != "n":
+            print("That's not a valid answer")
+            print_bar()
+            check = input("Do you want to start over? (y/n) ")
+
+        if check == "n":
+            print("Ok. bye!")
+            print_bar()
+            break
+
+        os.system("clear")
 
 
-if "__name__" == "__main__":
-    main()
+if __name__ == "__main__":
+    loop()
