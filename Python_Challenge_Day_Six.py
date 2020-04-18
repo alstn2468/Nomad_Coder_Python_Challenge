@@ -105,7 +105,7 @@ def main():
     money = get_currency_input(a_country[1], b_country[1])
     convert_result = convert_currency(a_country[1], b_country[1], money)
 
-    print(f"{convert_result[0]} is  {convert_result[1]}")
+    print(f"{convert_result[0]} is {convert_result[1]}")
 
 
 if __name__ == "__main__":
