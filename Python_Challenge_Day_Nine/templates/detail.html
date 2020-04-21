@@ -2,12 +2,32 @@
 <html>
 
 <head>
-  <title>Nomad News | {{ title }}</title>
+  <title>Nomad News | {{ data.title }}</title>
   <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet">
   </link>
 </head>
 
 <body>
+  <header>
+    <h1>{{ data.title }}</h1>
+    <div>
+      <span>{{ data.points }} points | </span>
+      <span>By {{ data.author }} | </span>
+      <span><a href={{ data.url }} target="_blank">{{ data.url }}</a></span>
+    </div>
+  </header>
+  <main>
+    {% if error %}
+    <h2 style="text-align: center;">
+      <strong>
+        {{ error }}
+      </strong>
+    </h2>
+    {% else %}
+    <div></div>
+    <hr />
+    {% endif %}
+  </main>
 </body>
 
 </html>

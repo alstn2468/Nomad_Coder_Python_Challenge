@@ -45,5 +45,21 @@ def home():
         return render_template("home.html", order=order, error=error)
 
 
+@app.route("/<int:object_id>")
+def detail(object_id):
+
+    try:
+        detail_url = make_detail_url(object_id)
+        response = requests.get(detail_url)
+        data = response.json()
+        print(data["children"])
+        return render_template("detail.html", object_id=object_id, data=data)
+
+    except Exception:
+        error = f"Can't get detail information."
+
+    return render_template("detail.html", object_id=object_id, data=data, error=error)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)

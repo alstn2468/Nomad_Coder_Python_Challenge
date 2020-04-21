@@ -9,11 +9,9 @@
 
 <body>
     <header>
-        <h1>
-            <a href={{ url_for("home") }}>Nomad News</a>
-        </h1>
+        <h1>Nomad News</h1>
         <div>
-            <span>Order by:</span>
+            <span>Order by : </span>
             {% if order == 'popular' %}
             <strong>
                 Popular
@@ -26,7 +24,7 @@
             <a href={{ url_for( "home", order="popular" ) }}>
                 Popular
             </a>
-            <span>|</span>
+            <span> | </span>
             <strong>
                 New
             </strong>
@@ -40,12 +38,18 @@
         {% for each in news %}
         <div>
             <div>
-                <a href="">
+                <a href={{ url_for( "detail", object_id=each.objectID ) }}>
                     <h3>{{ each.title }}</h3>
                 </a>
-                ( <a href="" target="_blank"></a> )
+                <div>
+                    ( <a href="{{ each.url }}" target="_blank">{{ each.url }}</a> )
+                </div>
             </div>
-            <div>comment</div>
+            <div>
+                <span>{{ each.points }} points | </span>
+                <span>By {{ each.author }} | </span>
+                <span>{{ each.num_comments }} comments</span>
+            </div>
         </div>
         <hr />
         {% endfor %}
