@@ -55,7 +55,7 @@ def detail(object_id):
     except Exception:
         error = f"Can't get detail information."
 
-    return render_template("detail.html", object_id=object_id, data=data, error=error)
+    return render_template("detail.html", object_id=object_id, error=error)
 
 
 if __name__ == "__main__":
