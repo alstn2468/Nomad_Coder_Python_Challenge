@@ -23,7 +23,16 @@ app = Flask("DayNine")
 @app.route("/")
 def home():
     order = request.args.get("order", default="popular")
-    return render_template("home.html", order=order)
+
+    if order == "popular":
+        response = requests.get(popular)
+
+    elif order == "new":
+        response = requests.get(new)
+
+    news = response.json()["hits"]
+
+    return render_template("home.html", order=order, news=news)
 
 
 if __name__ == "__main__":

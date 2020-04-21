@@ -2,29 +2,41 @@
     <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
     </head>
-    <body> 
+    <body>
         <div id="header">
-            <h1>
+            <h1 id="header-text">
                 <a href={{ url_for("home") }}>Nomad News</a>
             </h1>
             <div>
-            Order by:
-                <a  {% if order == "popular" %}
-                        style="color: red;"
+                <span class="order-link">Order by:</span>
+                <a  
+                    class="order-link
+                    {% if order == 'popular' %}
+                        selected
                     {% endif %}
+                    "
                     href={{ url_for("home", order="popular") }}
                 >
                     Popular
                 </a>
-                |
-                <a  {% if order == "new" %}
-                        style="color: red;"
+                <span class="order-link">|</span>
+                <a  
+                    class="order-link
+                    {% if order == 'new' %}
+                        selected
                     {% endif %} 
+                    "
                     href={{ url_for("home", order="new") }}
                 >
                     New
                 </a>
             </div>
+
+            <div class="division"/>
         <div>
+
+        {% for each in news %}
+            <h3>{{ each.title }}</h3>
+        {% endfor %}
     </body>
 </html>
