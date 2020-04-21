@@ -14,7 +14,7 @@ def make_detail_url(id):
 
 
 @app.route("/")
-def home():
+def index():
     order = request.args.get("order", default="popular")
 
     try:
@@ -31,11 +31,11 @@ def home():
         else:
             news = news_db[order]
 
-        return render_template("home.html", order=order, news=news)
+        return render_template("index.html", order=order, news=news)
     except Exception:
         error = f"Can't get {order} news."
 
-        return render_template("home.html", order=order, error=error)
+        return render_template("index.html", order=order, error=error)
 
 
 @app.route("/<int:object_id>")

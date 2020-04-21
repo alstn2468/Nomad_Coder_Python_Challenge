@@ -17,11 +17,11 @@
                 Popular
             </strong>
             <span>|</span>
-            <a href={{ url_for( "home", order="new" ) }}>
+            <a href={{ url_for( "index", order="new" ) }}>
                 New
             </a>
             {% elif order == "new" %}
-            <a href={{ url_for( "home", order="popular" ) }}>
+            <a href={{ url_for( "index", order="popular" ) }}>
                 Popular
             </a>
             <span> | </span>
