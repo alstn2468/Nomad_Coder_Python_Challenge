@@ -25,7 +25,6 @@ def home():
     order = request.args.get("order", default="popular")
 
     try:
-
         if order == "popular":
             response = requests.get(popular)
 
