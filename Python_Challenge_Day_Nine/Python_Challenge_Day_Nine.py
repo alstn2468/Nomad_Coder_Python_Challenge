@@ -25,13 +25,18 @@ def home():
     order = request.args.get("order", default="popular")
 
     try:
-        if order == "popular":
-            response = requests.get(popular)
+        if order not in db.keys():
+            if order == "popular":
+                response = requests.get(popular)
 
-        elif order == "new":
-            response = requests.get(new)
+            elif order == "new":
+                response = requests.get(new)
 
-        news = response.json()["hits"]
+            news = response.json()["hits"]
+            db[order] = news
+
+        else:
+            news = db[order]
 
         return render_template("home.html", order=order, news=news)
     except Exception:
