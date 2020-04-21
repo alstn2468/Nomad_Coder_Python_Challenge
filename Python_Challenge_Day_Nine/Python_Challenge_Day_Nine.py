@@ -40,7 +40,6 @@ def index():
 
 @app.route("/<int:object_id>")
 def detail(object_id):
-
     try:
         if object_id not in comment_db.keys():
             detail_url = make_detail_url(object_id)
