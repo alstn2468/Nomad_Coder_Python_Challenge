@@ -24,15 +24,21 @@ app = Flask("DayNine")
 def home():
     order = request.args.get("order", default="popular")
 
-    if order == "popular":
-        response = requests.get(popular)
+    try:
 
-    elif order == "new":
-        response = requests.get(new)
+        if order == "popular":
+            response = requests.get(popular)
 
-    news = response.json()["hits"]
+        elif order == "new":
+            response = requests.get(new)
 
-    return render_template("home.html", order=order, news=news)
+        news = response.json()["hits"]
+
+        return render_template("home.html", order=order, news=news)
+    except Exception:
+        error = f"Can't get {order} news."
+
+        return render_template("home.html", order=order, error=error)
 
 
 if __name__ == "__main__":
