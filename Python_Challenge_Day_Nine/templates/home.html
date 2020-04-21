@@ -1,0 +1,26 @@
+<html>
+    <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css') }}">
+    </head>
+    <body> 
+        <h1>Nomad News</h1>
+        <div>
+        Order by:
+            <a  {% if order == "popular" %}
+                    style="color: red;"
+                {% endif %}
+                href={{ url_for("home", order="popular") }}
+            >
+                Popular
+            </a>
+            |
+            <a  {% if order == "new" %}
+                    style="color: red;"
+                {% endif %} 
+                href={{ url_for("home", order="new") }}
+            >
+                New
+            </a>
+        </div>
+    </body>
+</html>

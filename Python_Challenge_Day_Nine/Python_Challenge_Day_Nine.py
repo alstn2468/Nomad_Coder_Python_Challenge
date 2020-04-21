@@ -20,4 +20,11 @@ db = {}
 app = Flask("DayNine")
 
 
-app.run(host="0.0.0.0")
+@app.route("/")
+def home():
+    order = request.args.get("order", default="popular")
+    return render_template("home.html", order=order)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", debug=True)
