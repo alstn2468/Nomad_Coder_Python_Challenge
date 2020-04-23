@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 
@@ -39,40 +40,59 @@ sub_reddits = [
 app = Flask("DayEleven")
 
 
-def find_upvotes(html):
-    pass
+def find_all_post_datas(html, item):
+    result = []
+    regex = re.compile(".*Post.*")
+    posts = html.find_all("div", attrs={"class": regex})
 
+    for post in posts:
+        upvotes = post.find(
+            "div", attrs={"class": "_1rZYMD_4xY3gRcSS3p8ODO"}
+        ).get_text()
+        url = post.find(
+            "a", attrs={"class": "SQnoC3ObvgnGjWt90zD9Z _2INHSNB8V5eaWp4P0rY_mE"}
+        )
+        title = post.find("h3").get_text()
 
-def find_title(html):
-    pass
+        if all([upvotes, url, title]):
+            if "k" in upvotes:
+                upvotes = upvotes.replace("k", "000").replace(".", "")
+
+            result.append(
+                create_result_data(
+                    int(upvotes), title, get_reddit_comment_page(url["href"]), item
+                )
+            )
+
+    return result
 
 
 def get_reddit_comment_page(postfix):
-    return "https://reddit.com/" + postfix
+    return "https://reddit.com" + postfix
 
 
-def parse_content_to_html(content):
-    return BeautifulSoup(content, "html.parser")
+def parse_text_to_html(text):
+    return BeautifulSoup(text, "html.parser")
 
 
-def get_reddit_response_content(sub_reddit):
+def get_reddit_response_text(sub_reddit):
     url = f"https://www.reddit.com/r/{sub_reddit}/top/?t=month"
 
     try:
-        response = requests.get(url, headers)
+        response = requests.get(url, headers=headers)
 
-        return response.content
+        return response.text
 
     except Exception:
         return None
 
 
 def create_error_message(item):
-    return f"Can't get {item}'s contents."
+    return f"Can't get {item}'s texts."
 
 
-def create_result_data(upvotes, title, url):
-    return {"upvotes": upvotes, "title": title, "url": url}
+def create_result_data(upvotes, title, url, item):
+    return {"upvotes": upvotes, "title": title, "url": url, "item": item}
 
 
 @app.route("/")
@@ -86,14 +106,16 @@ def read():
     errors, results = [], []
 
     for item in items:
-        content = get_reddit_response_content(item)
+        text = get_reddit_response_text(item)
 
-        if not content:
+        if not text:
             errors.append(create_error_message(item))
             continue
 
-        html = parse_content_to_html(content)
-        print(type(html))
+        html = parse_text_to_html(text)
+        results.extend(find_all_post_datas(html, item))
+
+    results.sort(key=lambda x: x["upvotes"], reverse=True)
 
     return render_template("read.html", items=items, errors=errors, results=results)
 

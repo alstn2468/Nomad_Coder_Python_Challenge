@@ -21,7 +21,13 @@
         {% if results|length == 0%}
         <h3>No Data.</h3>
         {% else %}
-        Data...
+        {% for result in results %}
+        <div>
+            <h3><a href={{ result.url }} target="_blank">{{ result.title }}</a></h3>
+            <h4>{{ result.upvotes }} upvotes · r/{{ result.item }}</h4>
+            <hr />
+        </div>
+        {% endfor %}
         {% endif %}
     </main>
 </body>
