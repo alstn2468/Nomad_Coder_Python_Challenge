@@ -2,12 +2,28 @@
 <html>
 
 <head>
+    <title>Reddit Reader</title>
     <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet">
     </link>
 </head>
 
 <body>
-    <h1>Hello World</h1>
+    <header>
+        <h1><a href={{ url_for("home") }}>Reddit Reader</a></h1>
+        <h3>Reading: {% for item in items %}r/{{item}} {% endfor %}</h3>
+    </header>
+    <main>
+        {% if errors %}
+        {% for error in errors %}
+        <h3 style="color: red;">{{ error }}</h3>
+        {% endfor %}
+        {% endif %}
+        {% if results|length == 0%}
+        <h3>No Data.</h3>
+        {% else %}
+        Data...
+        {% endif %}
+    </main>
 </body>
 
 </html>

@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 
 """
@@ -22,7 +23,7 @@ https://www.reddit.com/r/{subreddit}/top/?t=month
 This will give you the top posts in per month.
 """
 
-subreddits = [
+sub_reddits = [
     "javascript",
     "reactjs",
     "reactnative",
@@ -38,10 +39,64 @@ subreddits = [
 app = Flask("DayEleven")
 
 
+def find_upvotes(html):
+    pass
+
+
+def find_title(html):
+    pass
+
+
+def get_reddit_comment_page(postfix):
+    return "https://reddit.com/" + postfix
+
+
+def parse_content_to_html(content):
+    return BeautifulSoup(content, "html.parser")
+
+
+def get_reddit_response_content(sub_reddit):
+    url = f"https://www.reddit.com/r/{sub_reddit}/top/?t=month"
+
+    try:
+        response = requests.get(url, headers)
+
+        return response.content
+
+    except Exception:
+        return None
+
+
+def create_error_message(item):
+    return f"Can't get {item}'s contents."
+
+
+def create_result_data(upvotes, title, url):
+    return {"upvotes": upvotes, "title": title, "url": url}
+
+
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return render_template("home.html", sub_reddits=sub_reddits)
+
+
+@app.route("/read")
+def read():
+    items = list(request.args)
+    errors, results = [], []
+
+    for item in items:
+        content = get_reddit_response_content(item)
+
+        if not content:
+            errors.append(create_error_message(item))
+            continue
+
+        html = parse_content_to_html(content)
+        print(type(html))
+
+    return render_template("read.html", items=items, errors=errors, results=results)
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)

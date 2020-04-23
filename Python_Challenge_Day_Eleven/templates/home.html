@@ -2,12 +2,30 @@
 <html>
 
 <head>
+    <title>Reddit Reader</title>
     <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet">
     </link>
 </head>
 
 <body>
-    <h1>Hello World</h1>
+    <header>
+        <h1>Reddit Reader</h1>
+        <h3>A service to aggregate all your favourite subreddits</h3>
+    </header>
+    <main>
+        <form action={{ url_for("read") }}>
+            <h4>Select the subreddits you're interested on:</h4>
+            <ul>
+                {% for sub_reddit in sub_reddits %}
+                <li>
+                    <input type="checkbox" name={{ sub_reddit }} id={{ sub_reddit }}>
+                    <label for="{{ sub_reddit }}">r/{{ sub_reddit }}</label>
+                </li>
+                {% endfor %}
+            </ul>
+            <button type="submit">Aggregate</button>
+        </form>
+    </main>
 </body>
 
 </html>
