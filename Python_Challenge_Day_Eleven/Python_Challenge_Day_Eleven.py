@@ -56,7 +56,7 @@ def find_all_post_datas(html, item):
 
         if all([upvotes, url, title]):
             if "k" in upvotes:
-                upvotes = upvotes.replace("k", "000").replace(".", "")
+                upvotes = int(float(upvotes.replace("k", "")) * 1000)
 
             result.append(
                 create_result_data(
