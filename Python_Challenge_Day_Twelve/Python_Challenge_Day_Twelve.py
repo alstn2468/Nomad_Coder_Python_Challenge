@@ -131,7 +131,7 @@ def add():
         return render_template("read.html", warning=warning)
 
     if new_subreddit in sub_reddits:
-        warning = f"Subreddit r/{new_subreddit} is already exist."
+        warning = f"Subreddit r/{new_subreddit} already exist."
 
         return render_template("read.html", warning=warning)
 
