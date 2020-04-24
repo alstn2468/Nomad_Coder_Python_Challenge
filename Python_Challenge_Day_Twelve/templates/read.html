@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Reddit Reader</title>
+    <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet">
+    </link>
+</head>
+
+<body>
+    <header>
+        <h1>
+            {% if warning %}
+            Reddit Reader
+            {% else %}
+            <a href={{ url_for("home") }}>Reddit Reader</a>
+            {% endif %}
+        </h1>
+        <h3>
+            {% if warning %}
+            Couldn't add subreddit
+            {% else %}
+            Reading: {% for item in items %}r/{{item}} {% endfor %}
+            {% endif %}
+        </h3>
+    </header>
+    <main>
+        {% if warning %}
+        <h4>{{ warning }}</h4>
+        <a href={{ url_for("home") }}>← Go back</a>
+        {% else %}
+        {% if errors %}
+        {% for error in errors %}
+        <h3 style="color: red;">{{ error }}</h3>
+        {% endfor %}
+        {% endif %}
+        {% if results|length == 0%}
+        <h3>No Data.</h3>
+        {% else %}
+        {% for result in results %}
+        <div>
+            <h3><a href={{ result.url }} target="_blank">{{ result.title }}</a></h3>
+            <h4>{{ result.upvotes }} upvotes · r/{{ result.item }}</h4>
+            <hr />
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endif %}
+    </main>
+</body>
+
+</html>

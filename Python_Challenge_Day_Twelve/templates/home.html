@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Reddit Reader</title>
+    <link href="https://andybrewer.github.io/mvp/mvp.css" rel="stylesheet">
+    </link>
+</head>
+
+<body>
+    <header>
+        <h1>Reddit Reader</h1>
+        <h3>A service to aggregate all your favourite subreddits</h3>
+    </header>
+    <main>
+        <article>
+            <form action={{ url_for("add") }} method="POST">
+                <h4>Add a subreddit:</h4>
+                <h5>Write the name without /r/</h5>
+                <input type="text" placeholder="Write a subreddit name" required name="new-subreddit">
+                <button type="submit">Add</button>
+            </form>
+        </article>
+        <hr />
+        <article>
+            <form action={{ url_for("read") }}>
+                <h4>Select the subreddits you're interested on:</h4>
+                <ul>
+                    {% for sub_reddit in sub_reddits %}
+                    <li>
+                        <input type="checkbox" name={{ sub_reddit }} id={{ sub_reddit }}>
+                        <label for="{{ sub_reddit }}">r/{{ sub_reddit }}</label>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <button type="submit">Aggregate</button>
+            </form>
+        </article>
+    </main>
+</body>
+
+</html>
