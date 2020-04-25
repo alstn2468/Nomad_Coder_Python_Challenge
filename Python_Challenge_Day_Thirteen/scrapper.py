@@ -40,7 +40,13 @@ def scrape_wework_remotely(term):
     result = []
 
     for feature in features:
-        detail = feature.find_all("a")[-1]
+        detail = feature.find_all("a")
+
+        if len(detail) > 2:
+            detail = detail[1]
+        else:
+            detail = detail[0]
+
         url = "https://weworkremotely.com" + detail["href"].strip()
         company = feature.find("span", attrs={"class": "company"}).get_text(strip=True)
         title = feature.find("span", attrs={"class": "title"}).get_text(strip=True)
