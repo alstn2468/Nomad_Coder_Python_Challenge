@@ -25,7 +25,7 @@ def create_job_dict(url, company, title):
 
 
 def aggregate_remote_job(term):
-    return [*scrape_wework_remotely(term)]
+    return [*scrape_wework_remotely(term), *scrape_stack_overflow(term)]
 
 
 def scrape_wework_remotely(term):
@@ -37,9 +37,9 @@ def scrape_wework_remotely(term):
 
     for feature in features:
         detail = feature.find_all("a")[-1]
-        url = detail["href"]
-        company = feature.find("span", attrs={"class": "company"}).get_text()
-        title = feature.find("span", attrs={"class": "title"}).get_text()
+        url = "https://weworkremotely.com" + detail["href"].strip()
+        company = feature.find("span", attrs={"class": "company"}).get_text(strip=True)
+        title = feature.find("span", attrs={"class": "title"}).get_text(strip=True)
 
         result.append(create_job_dict(url, company, title))
 
@@ -47,7 +47,30 @@ def scrape_wework_remotely(term):
 
 
 def scrape_stack_overflow(term):
-    pass
+    text = get_text_response(STACK_OVERFLOW_URL.format(term))
+    html = parse_text_to_html(text)
+    list_results = html.find("div", attrs={"class": "listResults"})
+    grids = list_results.find_all("div", attrs={"class": "grid"})
+
+    result = []
+
+    for grid in grids:
+        a_tag = grid.find("a", attrs={"class": "s-link stretched-link"})
+
+        if not a_tag:
+            continue
+
+        url = "https://stackoverflow.com" + a_tag["href"].strip()
+        title = a_tag["title"].strip()
+        company = (
+            grid.find("h3", attrs={"class": "fc-black-700 fs-body1 mb4"})
+            .find("span")
+            .get_text(strip=True)
+        )
+
+        result.append(create_job_dict(url, company, title))
+
+    return result
 
 
 def scrape_remote_ok():
