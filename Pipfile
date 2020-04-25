@@ -5,10 +5,12 @@ verify_ssl = true
 
 [dev-packages]
 black = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
 flask = "*"
+bs4 = "*"
 
 [requires]
 python_version = "3.6"
