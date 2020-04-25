@@ -1,9 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 
-WEWORK_REMOTELY_URL = "https://weworkremotely.com/remote-jobs/search?utf8=✓&term={}"
+WEWORK_REMOTELY_URL = "https://weworkremotely.com/remote-jobs/search?term={}"
 STACK_OVERFLOW_URL = "https://stackoverflow.com/jobs?r=true&q={}"
-REMOTE_OK_URL = "https://remoteok.io/remote-{}-jobs"
+REMOTE_OK_URL = "https://remoteok.io/remote-dev+{}-jobs"
 
 
 def get_text_response(url):
