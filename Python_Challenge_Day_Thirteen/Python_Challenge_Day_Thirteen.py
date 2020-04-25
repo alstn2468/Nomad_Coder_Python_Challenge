@@ -7,8 +7,6 @@ https://remoteok.io/remote-dev+python-jobs
 
 Good luck!
 """
-import requests
-from bs4 import BeautifulSoup
 from flask import Flask, render_template, request
 
 app = Flask("DayThirteen")
@@ -22,8 +20,13 @@ def home():
 @app.route("/search")
 def search():
     term = request.args.get("term").lower()
-    print(term)
+
     return render_template("search.html")
+
+
+@app.route("/export")
+def export():
+    pass
 
 
 if __name__ == "__main__":
