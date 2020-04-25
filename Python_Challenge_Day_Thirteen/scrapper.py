@@ -2,8 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 
 WEWORK_REMOTELY_URL = "https://weworkremotely.com/remote-jobs/search?utf8=✓&term={}"
-STACK_OVERFLOW_URL = "https://stackoverflow.com/jobs?q={}"
-REMOTE_OK_URL = "https://remoteok.io/"
+STACK_OVERFLOW_URL = "https://stackoverflow.com/jobs?r=true&q={}"
+REMOTE_OK_URL = "https://remoteok.io/remote-{}-jobs"
 
 
 def get_text_response(url):
@@ -25,7 +25,11 @@ def create_job_dict(url, company, title):
 
 
 def aggregate_remote_job(term):
-    return [*scrape_wework_remotely(term), *scrape_stack_overflow(term)]
+    return [
+        *scrape_wework_remotely(term),
+        *scrape_stack_overflow(term),
+        *scrape_remote_ok(term),
+    ]
 
 
 def scrape_wework_remotely(term):
@@ -73,5 +77,24 @@ def scrape_stack_overflow(term):
     return result
 
 
-def scrape_remote_ok():
-    pass
+def scrape_remote_ok(term):
+    text = get_text_response(REMOTE_OK_URL.format(term))
+    html = parse_text_to_html(text)
+    table = html.find("table", attrs={"id": "jobsboard"})
+    jobs = table.find_all(
+        "td", attrs={"class": "company position company_and_position"}
+    )
+
+    result = []
+
+    for job in jobs:
+        url = (
+            "https://remoteok.io"
+            + job.find("a", attrs={"class": "preventLink"})["href"]
+        )
+        title = job.find("h2", attrs={"itemprop": "title"}).get_text(strip=True)
+        company = job.find("h3", attrs={"itemprop": "name"}).get_text(strip=True)
+
+        result.append(create_job_dict(url, company, title))
+
+    return result

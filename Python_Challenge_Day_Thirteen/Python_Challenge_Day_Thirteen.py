@@ -11,6 +11,7 @@ from flask import Flask, render_template, request
 from scrapper import aggregate_remote_job
 
 app = Flask("DayThirteen")
+db = {}
 
 
 @app.route("/")
@@ -21,7 +22,13 @@ def home():
 @app.route("/search")
 def search():
     term = request.args.get("term").lower()
-    jobs = aggregate_remote_job(term)
+
+    if term in db:
+        jobs = db[term]
+    else:
+        jobs = aggregate_remote_job(term)
+        db[term] = 
+        
     return render_template("search.html", jobs=jobs, term=term)
 
 
