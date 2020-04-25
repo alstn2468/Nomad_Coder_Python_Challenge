@@ -42,7 +42,7 @@ def scrape_wework_remotely(term):
     for feature in features:
         detail = feature.find_all("a")
 
-        if len(detail) > 2:
+        if len(detail) > 1:
             detail = detail[1]
         else:
             detail = detail[0]
