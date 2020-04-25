@@ -7,7 +7,8 @@ https://remoteok.io/remote-dev+python-jobs
 
 Good luck!
 """
-from flask import Flask, render_template, request
+from io import StringIO
+from flask import Flask, render_template, request, Response
 from scrapper import aggregate_remote_job
 
 app = Flask("DayThirteen")
@@ -27,14 +28,32 @@ def search():
         jobs = db[term]
     else:
         jobs = aggregate_remote_job(term)
-        db[term] = 
-        
+        db[term] = jobs
+
     return render_template("search.html", jobs=jobs, term=term)
 
 
 @app.route("/export")
 def export():
-    pass
+    term = request.args.get("term").lower()
+    output = StringIO()
+    output.write("Link,Title,Company\n")
+
+    for job in db[term]:
+        for idx, val in enumerate(job.values()):
+            output.write(str(val))
+
+            if idx < (len(job) - 1):
+                output.write(",")
+
+        output.write("\n")
+
+    response = Response(
+        output.getvalue(), mimetype="text/csv", content_type="application/octet-stream"
+    )
+    response.headers["Content-Disposition"] = f"attachment; filename={term}.csv"
+
+    return response
 
 
 if __name__ == "__main__":
