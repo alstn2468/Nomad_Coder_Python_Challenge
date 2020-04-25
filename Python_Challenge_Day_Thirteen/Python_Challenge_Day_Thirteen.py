@@ -8,6 +8,7 @@ https://remoteok.io/remote-dev+python-jobs
 Good luck!
 """
 from flask import Flask, render_template, request
+from scrapper import aggregate_remote_job
 
 app = Flask("DayThirteen")
 
@@ -20,8 +21,8 @@ def home():
 @app.route("/search")
 def search():
     term = request.args.get("term").lower()
-
-    return render_template("search.html")
+    jobs = aggregate_remote_job(term)
+    return render_template("search.html", jobs=jobs, term=term)
 
 
 @app.route("/export")

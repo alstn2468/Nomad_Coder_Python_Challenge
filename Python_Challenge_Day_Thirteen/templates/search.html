@@ -8,14 +8,26 @@
 </head>
 
 <body>
-    <header>
-        <h1>Remote Jobs</h1>
-        <h3><a href="">Export to CSV</a></h3>
-        <h4><a href={{ url_for("home") }}>← Go back</a></h4>
-    </header>
-    <main>
-        
-    </main>
+    <section>
+        <header>
+            <h1>Remote Jobs</h1>
+            <h3>{{ jobs|length }} {{ term }} jobs found.</h3>
+            <h4><a href="">Export to CSV</a></h4>
+            <h5><a href={{ url_for("home") }}>← Go back</a></h5>
+        </header>
+    </section>
+    <section>
+        <main>
+            {% for job in jobs %}
+            <div>
+                <h3>{{ job.title }}</h3>
+                <h4>{{ job.company }}</h4>
+                <h4><a href="{{ job.url }}">Apply</a></h4>
+            </div>
+            <hr/>
+            {% endfor %}
+        </main>
+    </section>
 </body>
 
 </html>

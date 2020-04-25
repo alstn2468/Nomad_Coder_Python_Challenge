@@ -1,8 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 
-WEWORK_REMOTELY_URL = "https://weworkremotely.com/"
-STACK_OVERFLOW_URL = "https://stackoverflow.com/jobs"
+WEWORK_REMOTELY_URL = "https://weworkremotely.com/remote-jobs/search?utf8=✓&term={}"
+STACK_OVERFLOW_URL = "https://stackoverflow.com/jobs?q={}"
 REMOTE_OK_URL = "https://remoteok.io/"
 
 
@@ -20,15 +20,33 @@ def parse_text_to_html(text):
     return BeautifulSoup(text, "html.parser")
 
 
-def aggregate_remote_job():
-    pass
+def create_job_dict(url, company, title):
+    return {"url": url, "company": company, "title": title}
 
 
-def scrape_wework_remotely():
-    pass
+def aggregate_remote_job(term):
+    return [*scrape_wework_remotely(term)]
 
 
-def scrape_stack_overflow():
+def scrape_wework_remotely(term):
+    text = get_text_response(WEWORK_REMOTELY_URL.format(term))
+    html = parse_text_to_html(text)
+    features = html.find_all("li", attrs={"class": "feature"})
+
+    result = []
+
+    for feature in features:
+        detail = feature.find_all("a")[-1]
+        url = detail["href"]
+        company = feature.find("span", attrs={"class": "company"}).get_text()
+        title = feature.find("span", attrs={"class": "title"}).get_text()
+
+        result.append(create_job_dict(url, company, title))
+
+    return result
+
+
+def scrape_stack_overflow(term):
     pass
 
 
