@@ -22,15 +22,20 @@ def home():
 
 @app.route("/search")
 def search():
-    term = request.args.get("term").lower()
+    try:
+        term = request.args.get("term").lower()
 
-    if term in db:
-        jobs = db[term]
-    else:
-        jobs = aggregate_remote_job(term)
-        db[term] = jobs
+        if term in db:
+            jobs = db[term]
+        else:
+            jobs = aggregate_remote_job(term)
+            db[term] = jobs
 
-    return render_template("search.html", jobs=jobs, term=term)
+        return render_template("search.html", jobs=jobs, term=term)
+    except Exception:
+        error = "Can't get remote job data."
+
+        return render_template("search.html", error=error, term=term)
 
 
 @app.route("/export")

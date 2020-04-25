@@ -18,6 +18,9 @@
     </section>
     <section>
         <main>
+        {% if error %}
+            <h2 style="color: red;">{{ error }}</h2>
+        {% else %}
             {% for job in jobs %}
             <div>
                 <h3>{{ job.title }}</h3>
@@ -26,6 +29,7 @@
             </div>
             <hr/>
             {% endfor %}
+        {% endif %}
         </main>
     </section>
 </body>
