@@ -10,6 +10,9 @@ def get_text_response(url):
     try:
         response = requests.get(url)
 
+        if response.status_code != 200:
+            raise Exception
+
         return response.text
 
     except Exception:

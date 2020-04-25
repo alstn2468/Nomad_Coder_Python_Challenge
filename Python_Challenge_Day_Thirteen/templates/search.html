@@ -11,8 +11,10 @@
     <section>
         <header>
             <h1>Remote Jobs</h1>
+            {% if not error %}
             <h3>{{ jobs|length }} {{ term }} jobs found.</h3>
             <h4><a href={{ url_for("export", term=term) }}>Export to CSV</a></h4>
+            {% endif %}
             <h5><a href={{ url_for("home") }}>← Go back</a></h5>
         </header>
     </section>
